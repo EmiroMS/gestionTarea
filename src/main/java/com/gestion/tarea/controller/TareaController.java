@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gestion.tarea.dto.TareaDTO;
+import com.gestion.tarea.exception.RequestException;
 import com.gestion.tarea.persistence.model.TareaModel;
 import com.gestion.tarea.persistence.model.TareaStatus;
 import com.gestion.tarea.service.TareaService;
@@ -30,7 +31,17 @@ public class TareaController {
 	
 	@PostMapping("/create")
 	public TareaModel createTarea(@RequestBody TareaDTO tareaDTO) {
+		if(tareaDTO.getTitle().equals("") || tareaDTO.getTitle() == null) {
+			throw new RequestException("400","the title is required");
+		}
+		if(tareaDTO.getDescription().equals("") || tareaDTO.getDescription() == null) {
+			throw new RequestException("400","the description is required");
+		}
+		/*if(tareaDTO.getEta().equals("") || tareaDTO.getEta() == null) {
+			throw new RequestException("400","the eta is required");
+		}*/
 		return this.tareaService.createTarea(tareaDTO);
+		
 	}
 	
 	@GetMapping("/finall")
